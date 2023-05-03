@@ -1,0 +1,52 @@
+step 1 :
+    link vueversion3.js ==< so you can use vue variable
+    <script src="./vueversion3.js"></script>
+
+
+{{}}  ==> inside html tag
+directives ==> to deal with attributes
+        title="name"     wrong
+        v-directive:title("name")
+
+
+
+step 2 :
+    create vue instance using createApp method return reference
+<script>
+    const app=Vue.craeteApp({
+        //options what it contains
+            data:()=>({
+               k1:'v1',
+               k2:'v2'
+            }),
+            methods,
+            components,
+            computed,
+            watch,
+            template,
+            emits
+    })
+step 3 : mount(#id)
+    </script>
+
+
+
+
+
+  -------------------  directives ------------------  
+v-if
+v-show
+
+
+v-text
+v-html
+
+v-bind
+v-model
+    @click.prevent
+    @click.once
+    @click.ctrl
+    @click.lazy
+v-for
+
+v-on

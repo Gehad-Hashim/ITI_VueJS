@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css' rel='stylesheet'
+        integrity='sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp' crossorigin='anonymous'>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js'></script>
+    <script src="./vueversion3.js"></script>
+    <link rel='stylesheet' href='style.css'>
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="mainApp" class="container my-2">
+        <nav class="navbar navbar-expand-lg px-2 border rounded-4" style="background-color:#32bfb8;">
+            <a class="navbar-brand fs-1 me-5 fw-bold" style=" font-family: 'Dancing Script', cursive;"
+                href="#">iRead</a>
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav ">
+                    <a class="nav-item nav-link fs-4 me-4" href="#">Home</a>
+                    <a class="nav-item nav-link  fs-4 me-4" href="#" @click.prevent="isWish_Visible=false">Books</a>
+                    <a class="nav-item nav-link fs-4 me-5" href="#">Authors</a>
+                    <button class="btn btn-3 fs-4 bg-warning" @click="isWish_Visible=true">wish list</button>
+                    <a class="nav-item nav-link fs-4 me-5 text-primary" href="#" @click="list=true">Books list</a>
+                </div>
+            </div>
+        </nav>
+
+
+        <div v-show="list==true">
+            <ul>
+                <li :title="book.authors" v-for="book in books">{{book.title}}</li>
+            </ul>
+        </div>
+
+        <div v-show="isWish_Visible==false" class="row mt-1 justify-content-center">
+            <div v-for="book in books" class="card border m-1" style="width: 15rem;">
+                <div><b>{{book.title}}</b></div>
+                <img :src="book.image" />
+                <b>categories :</b>
+                <div v-for="cat in book.categories">{{cat}} &nbsp;</div>
+                <div><b>author :</b>{{book.authors[0]}}</div>
+                <div><b>price :</b>{{book.price}}</div>
+                <div :class="[book.pageCount <50?'less':'more']"><b>no.pages :</b>{{book.pageCount}}</div>
+                <div><b>ISBN :</b>{{book.isbn}}</div>
+                <div class="card-footer">
+                    <button :disabled="book.pageCount==0" class="btn btn-warning" @click="addToList(book)">add to
+                        list</button>
+                </div>
+               
+            </div>
+        </div>
+
+
+
+
+
+        <div v-show="isWish_Visible==true">
+            <div >
+                <h2>You have {{wishList.items.length}} <template v-if="wishList.items.length==1">book</template>
+                    <template v-else>books</template> in whish list
+                </h2>
+                <!-- <div v-if="[wishList.items.length==0]">
+                    you have no books
+                </div> -->
+            </div>
+
+            <table class="table table-destriped table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>author</th>
+                        <th>category</th>
+                        <th>price</th>
+                        <th>isbn</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in wishList.items">
+                        <td>{{item.book.title}}</td>
+                        <!-- <td v-for="auth in item.book.authors">{{auth}}</td> -->
+                        <td>{{item.book.authors}}</td>
+                        <td>{{item.book.categories}}</td>
+                        <td>{{formatCurrency(item.book.price)}}</td>
+                        <td>{{item.book.isbn}}</td>
+                        <td><button class="btn btn-danger" @click="removeBook(item)">remove</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+    <script src="./books.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data: () => ({
+                list: false,
+                isWish_Visible: false,
+                books: books,
+                wishList: {
+                    items: []
+                }
+            }),
+            methods: {
+                checkExist(book){
+                   return this.wishList.items.some(i=>i.book.id==book.id)
+                },
+                addToList(book) {
+                    if(this.checkExist(book)){
+                        alert('already added to wishList');
+                    }else{
+
+                        this.wishList.items.push({ book: book, added: true });
+                    }
+
+                },
+                removeBook(item){
+                    this.wishList.items.splice(this.wishList.items.findIndex(i=>i.book.id==item.book.id),1)
+                },
+                formatCurrency(value){
+                    let formatter=Intl.NumberFormat("ar-sa",{
+                        style:'currency',
+                        currency:"SAR",
+                        minimumFractionDigits:0
+                    });
+                    return formatter.format(value);
+                }
+            }
+        });
+        app.mount('#mainApp');
+    </script>
+</body>
+
+</html>
