@@ -5,7 +5,7 @@
         <h5><b>title:</b> {{product.title}}</h5>
       </div>
       <div>
-        <img :src="product.image"/>
+        <router-link :to="'/product/'+product.id"> <img :src="product.image"/></router-link>
         <p><b>status:</b>{{product.status}}</p>
         <p><b>price:</b>{{product.price}}</p>
       </div>
